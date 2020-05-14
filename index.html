@@ -1,2 +1,66 @@
-<h1>Here is some html</h1>
-{ 1 + 2}
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+    
+    <style>
+        table 
+        {
+            width: auto;
+            font: 17px Calibri;
+        }
+        table, th, td 
+        {
+            border: solid 1px #DDD;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div ng-app="myApp" 
+        ng-controller="myController">
+
+        <table>
+            <tr>
+                <th>ID</th>
+                    <th>Bird Name</th>
+                        <th>Type of Bird</th>
+            </tr>
+
+            <tr ng-repeat="birds in list">
+                <td>{{birds.ID}}</td>
+                    <td>{{birds.Name}}</td>
+                        <td>{{birds.Type}}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+<!--The Controller-->
+<script>
+    var app = angular.module('myApp', []);
+    app.controller('myController',
+        function ($scope, $http) {
+
+            var request = {
+                method: 'get',
+                url: 'https://www.encodedna.com/angularjs/tutorial/birds.json',
+                dataType: 'json',
+                contentType: "application/json"
+            };
+
+            $scope.arrBirds = new Array;
+
+            $http(request)
+                .success(function (jsonData) {
+                    $scope.arrBirds = jsonData;
+                    $scope.list = $scope.arrBirds;
+                })
+                .error(function () {
+
+                });
+        });
+</script>
+</html>
