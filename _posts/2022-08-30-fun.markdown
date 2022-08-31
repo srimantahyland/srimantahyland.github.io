@@ -11,3 +11,5 @@ This is fun.
 
 $$ 1 + 2 $$
 $ 1 + 2 $
+\foreach \x in {1,...,10}{%
+  \texttt{Something you want : \the\numexpr\x*(\x+1)/2\relax}\par}
