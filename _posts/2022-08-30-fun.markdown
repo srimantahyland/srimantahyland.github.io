@@ -26,4 +26,4 @@ $$1+2$$
 >>> 2 + 2*x
 with potentially missing or wrong results
 ```
-<script>1+2</script>
+<script language="javascript">1+2</script>
