@@ -10,7 +10,11 @@ This is fun.
 <!--TBLFM C2=A1+A2; C1=56*78/4 -->
 
 $$ 1 + 2 $$
+
 $ 1 + 2 $
+
+$$1+2$$
+
 \foreach \x in {1,...,10}{%
   \texttt{Something you want : \the\numexpr\x*(\x+1)/2\relax}\par}
   
