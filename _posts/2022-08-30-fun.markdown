@@ -26,5 +26,8 @@ $$1+2$$
 >>> 2 + 2*x
 with potentially missing or wrong results
 ```
+```
+Code Block
+```
 
 <script language="javascript">1+2</script>
