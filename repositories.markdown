@@ -119,6 +119,7 @@ async function loadRepositories() {
     
     // Helper function to escape HTML to prevent XSS
     function escapeHtml(text) {
+      if (!text) return '';
       const div = document.createElement('div');
       div.textContent = text;
       return div.innerHTML;
@@ -144,12 +145,12 @@ async function loadRepositories() {
           <p class="repository-description">${description}</p>
           <div class="repository-meta">
             <span class="repository-language">
-              <span class="language-color" style="background-color: ${escapeHtml(languageColor)};"></span>
+              <span class="language-color" style="background-color: ${languageColor};"></span>
               ${language}
             </span>
             ${stars > 0 ? `<span class="repository-stats">⭐ ${stars}</span>` : ''}
             ${forks > 0 ? `<span class="repository-stats">🍴 ${forks}</span>` : ''}
-            <span>Updated on ${escapeHtml(updatedDate)}</span>
+            <span>Updated on ${updatedDate}</span>
           </div>
         </div>
       `;
