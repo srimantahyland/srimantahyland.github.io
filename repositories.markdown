@@ -130,7 +130,8 @@ async function loadRepositories() {
       const description = escapeHtml(repo.description || 'No description available');
       const repoName = escapeHtml(repo.name);
       const language = escapeHtml(repo.language || 'Unknown');
-      const languageColor = languageColors[repo.language] || '#ccc';
+      // Use color from predefined list, defaulting to safe gray if unknown
+      const languageColor = languageColors[repo.language] || '#cccccc';
       const stars = repo.stargazers_count;
       const forks = repo.forks_count;
       const updatedDate = new Date(repo.updated_at).toLocaleDateString('en-US', { 
@@ -150,7 +151,7 @@ async function loadRepositories() {
             </span>
             ${stars > 0 ? `<span class="repository-stats">⭐ ${stars}</span>` : ''}
             ${forks > 0 ? `<span class="repository-stats">🍴 ${forks}</span>` : ''}
-            <span>Updated on ${updatedDate}</span>
+            <span>Updated on ${escapeHtml(updatedDate)}</span>
           </div>
         </div>
       `;
