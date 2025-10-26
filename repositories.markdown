@@ -84,6 +84,9 @@ async function loadRepositories() {
     const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
     
     if (!response.ok) {
+      if (response.status === 403) {
+        throw new Error('API rate limit exceeded. Please try again later.');
+      }
       throw new Error('Failed to fetch repositories');
     }
     
@@ -114,11 +117,19 @@ async function loadRepositories() {
     // Sort repos by updated date (most recent first)
     repos.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
     
+    // Helper function to escape HTML to prevent XSS
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
     let html = '';
     repos.forEach(repo => {
-      const description = repo.description || 'No description available';
-      const language = repo.language || 'Unknown';
-      const languageColor = languageColors[language] || '#ccc';
+      const description = escapeHtml(repo.description || 'No description available');
+      const repoName = escapeHtml(repo.name);
+      const language = escapeHtml(repo.language || 'Unknown');
+      const languageColor = languageColors[repo.language] || '#ccc';
       const stars = repo.stargazers_count;
       const forks = repo.forks_count;
       const updatedDate = new Date(repo.updated_at).toLocaleDateString('en-US', { 
@@ -129,16 +140,16 @@ async function loadRepositories() {
       
       html += `
         <div class="repository">
-          <h3><a href="${repo.html_url}" target="_blank">${repo.name}</a></h3>
+          <h3><a href="${escapeHtml(repo.html_url)}" target="_blank">${repoName}</a></h3>
           <p class="repository-description">${description}</p>
           <div class="repository-meta">
             <span class="repository-language">
-              <span class="language-color" style="background-color: ${languageColor};"></span>
+              <span class="language-color" style="background-color: ${escapeHtml(languageColor)};"></span>
               ${language}
             </span>
             ${stars > 0 ? `<span class="repository-stats">⭐ ${stars}</span>` : ''}
             ${forks > 0 ? `<span class="repository-stats">🍴 ${forks}</span>` : ''}
-            <span>Updated on ${updatedDate}</span>
+            <span>Updated on ${escapeHtml(updatedDate)}</span>
           </div>
         </div>
       `;
@@ -152,9 +163,5 @@ async function loadRepositories() {
 }
 
 // Load repositories when the page loads
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadRepositories);
-} else {
-  loadRepositories();
-}
+document.addEventListener('DOMContentLoaded', loadRepositories);
 </script>
